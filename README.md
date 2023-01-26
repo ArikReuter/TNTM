@@ -30,7 +30,7 @@ tntm = TNTM_SentenceTransformer.TNTM_SentenceTransformer(
       )
 result = tntm.fit(
               corpus              = corpus,
-              vocab              = vocab, 
+              vocab               = vocab, 
               word_embeddings     = word_embeddings,
               document_embeddings = document_embeddings)
 ```
@@ -44,3 +44,7 @@ Arguments in this example:
 - "vocab": List of unique words in the corpus
 - "word_embeddings": Embeddings of each vocabulary where the i-th row is the embedding of the i-th word in the vocabulary. Has shape (len(vocab), embedding_dim). Has type torch.Tensor
 - "document_embeddings": Embedding of each document in the corpus. Has shape (n_document, embedding_dim) has type torch.tensor
+
+Return values, tuple of: 
+- First, a matrix of shape (number_topics, len(vocab)) where each row contains the words of the topic sorted by their likelihood under the topic. I.e. the word at index (5,2) contains the third most likely word for topic 6.
+- Second, a matrix of shape (number_topics, len(vocab)) that contains the relative likelihood of each word under the topic of the respective row
