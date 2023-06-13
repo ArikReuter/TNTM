@@ -145,14 +145,14 @@ class TNTM_SentenceTransformer():
 
     # compute the low-dimensional embeddings and the initial topic assignments to use later
     init_in = init.Initializer(self.embedding_ten.cpu().detach().numpy(), n_topics = self.n_topics, n_dims = self.n_dims)
-    embeddings_proj, mus_init, L_lower_init, log_diag_init, bic = init_in.reduce_dim_and_cluster()
+    embeddings_proj, mus_init, L_lower_init, log_diag_init, bic = init_in.reduce_dim_and_cluster(umap_hyperparams = self.umap_hyperparams)
 
     embeddings_proj_ten = torch.tensor(embeddings_proj).to(self.device)
     mus_init_ten = torch.tensor(mus_init).to(self.device)
     L_lower_init_ten = torch.tensor(L_lower_init).to(self.device)
     log_diag_init_ten = torch.tensor(log_diag_init).to(self.device)
 
-    # initialize training of the VAE
+    # initialize training of the VAEa
     
     train_ds, val_ds, test_ds = TNTM_inference.train_test_split(
                               list(zip(self.document_embeddings, self.bow_ten )), 
