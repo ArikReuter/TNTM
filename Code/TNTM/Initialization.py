@@ -47,13 +47,13 @@ class Initializer:
     self.n_topics = n_topics
     self.n_dims = n_dims 
 
-  def reduce_dimensionality(self, n_neighbors = 15, min_dist = 0.01):
+  def reduce_dimensionality(self, umap_hyperparams = {'n_neighbors': 15, 'min_dist': 0.01}):
     """
     Take the tensor embeddings of the embeddings of the vocabulary and reduce their dimensionality. 
     The paramters n_neighbors and min_dist change the behavour of UMAP. 
     """
     
-    umap1 = umap.UMAP(n_components=self.n_dims, metric = 'cosine', n_neighbors = n_neighbors, min_dist = min_dist)
+    umap1 = umap.UMAP(n_components=self.n_dims, metric = 'cosine', **umap_hyperparams)
     proj_embeddings = umap1.fit_transform(self.embeddings_vocab)
     self.proj_embeddings = proj_embeddings
 
@@ -91,7 +91,7 @@ class Initializer:
     return L_lower_init, log_diag_init
 
 
-  def reduce_dim_and_cluster(self, n_neighbors = 15, min_dist = 0.01, eps = 1e-4):
+  def reduce_dim_and_cluster(self, eps = 1e-4, umap_hyperparams = {'n_neighbors': 15, 'min_dist': 0.01}):
     """
     Reduce the dimensionality with UMAP of the embeddings and fit a GMM model, which yields the means and covariances (albeit reparameterized) 
     of the GMM. 
@@ -107,7 +107,7 @@ class Initializer:
       bic: Bayesian information criterion of GMM
     """
   
-    emb_dim_red = self.reduce_dimensionality(n_neighbors = n_neighbors, min_dist = min_dist)
+    emb_dim_red = self.reduce_dimensionality(umap_hyperparams = umap_hyperparams)
 
     mus_init, sigmas_init, bic = self.fit_gmm(emb_dim_red)
 

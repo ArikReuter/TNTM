@@ -54,7 +54,8 @@ class TNTM_SentenceTransformer():
     device = None, 
     validation_set_size : float = 0.2,
     early_stopping: bool = True,
-    n_epochs_early_stopping: int = 10
+    n_epochs_early_stopping: int = 10,
+    umap_hyperparams: dict = {'n_neighbors': 15, 'min_dist': 0.1}
   ):
 
     """
@@ -76,6 +77,7 @@ class TNTM_SentenceTransformer():
     :param float: validation_set_size: Fraction of the used dataset for validation
     :param bool early_stopping : Whether early stopping based on the median validation loss should be done
     :param int n_epochs_early_stopping: Patience paramter for early stopping, i.e. for how many epochs to wait until the next decrease in median validation loss has to happen
+    :param dict umap_hyperparams: Hyperparameters for the UMAP algorithm used for visualization. See https://umap-learn.readthedocs.io/en/latest/parameters.html for more details
     """
 
     self.n_topics = n_topics
@@ -92,6 +94,7 @@ class TNTM_SentenceTransformer():
     self.validation_set_size = validation_set_size
     self.early_stopping = early_stopping
     self.n_epochs_early_stopping = n_epochs_early_stopping
+    self.umap_hyperparams = umap_hyperparams
 
     if device == None:
       self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
